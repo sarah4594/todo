@@ -20,3 +20,12 @@ it('should add 2 todos', () => {
   console.log(state.todos)
   expect(Object.values(state.todos).length).toBe(2)
 })
+
+it('should toggle completed', () => {
+  const { state, actions } = createOvermindMock(config)
+  const title = 'new todo'
+  const todoId = actions.addTodo(title)
+  expect(state.todos[todoId].completed).toBe(false)
+  actions.toggleTodo(todoId)
+  expect(state.todos[todoId].completed).toBe(true)
+})
