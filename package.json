@@ -19,6 +19,9 @@
     "eslint-config-prettier": "^6.5.0",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^2.2.0",
+    "overmind": "^20.1.0-1572182984474",
+    "overmind-devtools": "^21.1.0-1572182984474",
+    "overmind-react": "^21.1.0-1572182984474",
     "prettier": "^1.18.2",
     "typescript": "3.6.4"
   },
