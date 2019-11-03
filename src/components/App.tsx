@@ -1,19 +1,16 @@
 import React from 'react'
-import logo from '../logo.svg'
-import './App.css'
 import { useOvermind } from '../overmind'
-import { addTodo } from '../overmind/actions'
 
 const App: React.FC = () => {
-  const { state, actions } = useOvermind()
-  actions.addTodo('first todo')
-  actions.addTodo('second todo')
+  const { state } = useOvermind()
 
   return (
-    <div className="App">
+    <div>
       <ul>
         {Object.values(state.todos).map(todo => (
-          <li key={todo.id}>{todo.title}</li>
+          <li key={todo.id}>
+            {todo.title} {todo.completed ? 'yes' : 'no'}
+          </li>
         ))}
       </ul>
     </div>
