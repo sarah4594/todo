@@ -1,22 +1,16 @@
 import React from 'react'
 import { useOvermind } from '../overmind'
 import { toggleTodo } from '../overmind/actions'
+import TodoItem from './TodoItem'
 
 const App: React.FC = () => {
   const { state } = useOvermind()
-  const handleClick = () => {
-    actions.toggleTodo(todo.id)
-  }
 
   return (
     <div>
       <ul>
         {Object.values(state.todos).map(todo => (
-          <li key={todo.id}>
-            {todo.title}
-            <input type="checkbox" id={todo.id} onClick={handleClick()} />
-            {todo.completed ? 'yes' : 'no'}
-          </li>
+          <TodoItem key={todo.id} todo={todo} />
         ))}
       </ul>
     </div>
