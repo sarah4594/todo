@@ -1,6 +1,5 @@
 import React from 'react'
 import { useOvermind } from '../overmind'
-import { toggleTodo } from '../overmind/actions'
 import TodoItem from './TodoItem'
 
 const App: React.FC = () => {
