@@ -1,3 +1,5 @@
+import { Derive } from 'overmind'
+
 export interface Todo {
   id: string
   title: string
@@ -8,8 +10,10 @@ export type State = {
   todos: {
     [id: string]: Todo
   }
+  todoList: Derive<State, Todo[]>
 }
 
 export const state: State = {
   todos: {},
+  todoList: ({ todos }) => Object.values(todos),
 }
