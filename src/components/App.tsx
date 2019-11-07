@@ -4,7 +4,8 @@ import TodoItem from './TodoItem'
 
 const App: React.FC = () => {
   const { state, actions } = useOvermind()
-  const [count, setCount] = React.useState(1)
+  const todoCount = Object.values(state.todos).length
+  const [count, setCount] = React.useState(todoCount + 1)
 
   const handleClick = () => {
     actions.addTodo(`Todo #${count}`)
