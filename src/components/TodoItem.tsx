@@ -15,7 +15,7 @@ const TodoItem = ({ todo }: Props) => {
 
   return (
     <li>
-      <input type="checkbox" checked={todo.completed} onClick={handleClick} />
+      <input type="checkbox" checked={todo.completed} onChange={handleClick} />
       {todo.title} ({todo.completed ? 'yes' : 'no'})
     </li>
   )
