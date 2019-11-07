@@ -1,6 +1,5 @@
 import { OnInitialize } from 'overmind'
 
-export const onInitialize: OnInitialize = ({ actions }) => {
-  actions.addTodo('first todo')
-  actions.addTodo('second todo')
+export const onInitialize: OnInitialize = ({ state, effects }) => {
+  state.todos = effects.getTodos()
 }
