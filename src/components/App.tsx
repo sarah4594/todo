@@ -4,17 +4,32 @@ import TodoItem from './TodoItem'
 
 const App: React.FC = () => {
   const { state, actions } = useOvermind()
-  const todoCount = state.todoList.length
-  const [count, setCount] = React.useState(todoCount + 1)
+  const [title, setTitle] = React.useState('')
 
-  const handleClick = () => {
-    actions.addTodo(`Todo #${count}`)
-    setCount(count + 1)
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value)
+  }
+
+  const handleKeyUp = (event: React.KeyboardEvent) => {
+    if (event.keyCode !== 13) {
+      return
+    }
+    event.preventDefault()
+    if (title) {
+      actions.addTodo(title)
+      setTitle('')
+    }
   }
 
   return (
     <div>
-      <button onClick={handleClick}>Add Todo</button>
+      <input
+        type="text"
+        placeholder="Add Todo"
+        value={title}
+        onChange={handleChange}
+        onKeyUp={handleKeyUp}
+      />
       <ul>
         {state.todoList.map(todo => (
           <TodoItem key={todo.id} todo={todo} />
