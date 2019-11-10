@@ -31,10 +31,15 @@ const App: React.FC = () => {
         onKeyUp={handleKeyUp}
       />
       <ul>
-        {state.todoList.map(todo => (
+        {state.filteredList.map(todo => (
           <TodoItem key={todo.id} todo={todo} />
         ))}
       </ul>
+      <button onClick={actions.showAll}>All ({state.totalCount})</button>
+      <button onClick={actions.showActive}>Active ({state.activeCount})</button>
+      <button onClick={actions.showCompleted}>
+        Completed ({state.completedCount})
+      </button>
     </div>
   )
 }

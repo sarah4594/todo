@@ -27,3 +27,15 @@ export const saveEditingTodo: Action<string> = ({ state, effects }, title) => {
   state.editingTodoId = undefined
   effects.storeTodos(state.todos)
 }
+
+export const showAll: Action = ({ state }) => {
+  state.filter = 'all'
+}
+
+export const showActive: Action = ({ state }) => {
+  state.filter = 'active'
+}
+
+export const showCompleted: Action = ({ state }) => {
+  state.filter = 'completed'
+}

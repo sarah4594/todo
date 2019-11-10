@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useOvermind } from '../overmind'
 import { Todo } from '../overmind/state'
 
