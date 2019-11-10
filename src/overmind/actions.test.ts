@@ -1,4 +1,4 @@
-import { createOvermindMock } from 'overmind'
+import { createOvermindMock, action } from 'overmind'
 import { config } from './'
 
 it('should add a todo', () => {
@@ -32,4 +32,42 @@ it('should toggle completed', () => {
   expect(state.todos[todoId].completed).toBe(false)
   actions.toggleTodo(todoId)
   expect(state.todos[todoId].completed).toBe(true)
+})
+
+describe('filtered list', () => {
+  it('should return all todos', () => {
+    const { state, actions } = createOvermindMock(config, {
+      storeTodos: jest.fn(),
+    })
+    const todoId = actions.addTodo('todo1')
+    actions.toggleTodo(todoId)
+    actions.addTodo('todo2')
+    actions.addTodo('todo3')
+    actions.showAll()
+    expect(state.filteredList.length).toBe(3)
+  })
+
+  it('should return active todos', () => {
+    const { state, actions } = createOvermindMock(config, {
+      storeTodos: jest.fn(),
+    })
+    const todoId = actions.addTodo('todo1')
+    actions.toggleTodo(todoId)
+    actions.addTodo('todo2')
+    actions.addTodo('todo3')
+    actions.showActive()
+    expect(state.filteredList.length).toBe(2)
+  })
+
+  it('should return completed todos', () => {
+    const { state, actions } = createOvermindMock(config, {
+      storeTodos: jest.fn(),
+    })
+    const todoId = actions.addTodo('todo1')
+    actions.toggleTodo(todoId)
+    actions.addTodo('todo2')
+    actions.addTodo('todo3')
+    actions.showCompleted()
+    expect(state.filteredList.length).toBe(1)
+  })
 })
