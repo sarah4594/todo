@@ -11,6 +11,7 @@ export type State = {
     [id: string]: Todo
   }
   todoList: Derive<State, Todo[]>
+  editingTodoId?: string
 }
 
 export const state: State = {

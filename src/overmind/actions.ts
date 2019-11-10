@@ -12,3 +12,18 @@ export const toggleTodo: Action<string> = ({ state, effects }, todoId) => {
   state.todos[todoId].completed = !state.todos[todoId].completed
   effects.storeTodos(state.todos)
 }
+
+export const startEditing: Action<string> = ({ state }, todoId) => {
+  state.editingTodoId = todoId
+}
+
+export const stopEditing: Action = ({ state }) => {
+  state.editingTodoId = undefined
+}
+
+export const saveEditingTodo: Action<string> = ({ state, effects }, title) => {
+  if (!state.editingTodoId) return
+  state.todos[state.editingTodoId].title = title
+  state.editingTodoId = undefined
+  effects.storeTodos(state.todos)
+}
