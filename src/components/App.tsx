@@ -26,7 +26,7 @@ const App: React.FC = () => {
       <input
         type="text"
         placeholder="Add Todo"
-        value={title}
+        defaultValue={title}
         onChange={handleChange}
         onKeyUp={handleKeyUp}
       />
