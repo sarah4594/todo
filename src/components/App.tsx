@@ -35,9 +35,11 @@ const App: React.FC = () => {
           <TodoItem key={todo.id} todo={todo} />
         ))}
       </ul>
-      <button onClick={actions.showAll}>All</button>
-      <button onClick={actions.showActive}>Active</button>
-      <button onClick={actions.showCompleted}>Completed</button>
+      <button onClick={actions.showAll}>All ({state.totalCount})</button>
+      <button onClick={actions.showActive}>Active ({state.activeCount})</button>
+      <button onClick={actions.showCompleted}>
+        Completed ({state.completedCount})
+      </button>
     </div>
   )
 }

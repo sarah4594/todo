@@ -14,6 +14,9 @@ export type State = {
   editingTodoId?: string
   filter: 'all' | 'active' | 'completed'
   filteredList: Derive<State, Todo[]>
+  totalCount: Derive<State, number>
+  activeCount: Derive<State, number>
+  completedCount: Derive<State, number>
 }
 
 export const state: State = {
@@ -31,4 +34,9 @@ export const state: State = {
           return todo.completed
       }
     }),
+  totalCount: ({ todos }) => Object.values(todos).length,
+  activeCount: ({ todos }) =>
+    Object.values(todos).filter(todo => !todo.completed).length,
+  completedCount: ({ todos }) =>
+    Object.values(todos).filter(todo => todo.completed).length,
 }
