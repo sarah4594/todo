@@ -101,4 +101,16 @@ describe('filtered list', () => {
     expect(state.completedCount).toBe(0)
     expect(state.activeCount).toBe(2)
   })
+
+  it('should delete a single todo', () => {
+    const { state, actions } = createOvermindMock(config, {
+      storeTodos: jest.fn(),
+    })
+    const todoId = actions.addTodo('todo1')
+    actions.addTodo('todo2')
+    actions.addTodo('todo3')
+    expect(state.totalCount).toBe(3)
+    actions.deleteTodo(todoId)
+    expect(state.totalCount).toBe(2)
+  })
 })

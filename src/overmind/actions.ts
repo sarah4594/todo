@@ -48,3 +48,8 @@ export const clearCompleted: Action = ({ state, effects }) => {
     })
   effects.storeTodos(state.todos)
 }
+
+export const deleteTodo: Action<string> = ({ state, effects }, todoId) => {
+  delete state.todos[todoId]
+  effects.storeTodos(state.todos)
+}

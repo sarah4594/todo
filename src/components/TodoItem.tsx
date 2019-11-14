@@ -14,6 +14,10 @@ const TodoItem = ({ todo }: Props) => {
     actions.toggleTodo(todo.id)
   }
 
+  const handleDelete = () => {
+    actions.deleteTodo(todo.id)
+  }
+
   const handleStartEdit = () => {
     if (state.editingTodoId) return
     actions.startEditing(todo.id)
@@ -30,9 +34,8 @@ const TodoItem = ({ todo }: Props) => {
             checked={todo.completed}
             onChange={handleClick}
           />
-          <span onDoubleClick={handleStartEdit}>
-            {todo.title} ({todo.completed ? 'yes' : 'no'})
-          </span>
+          <span onDoubleClick={handleStartEdit}>{todo.title}</span>
+          <button onClick={handleDelete}>Delete</button>
         </div>
       )}
     </li>
