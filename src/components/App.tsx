@@ -40,6 +40,7 @@ const App: React.FC = () => {
       <button onClick={actions.showCompleted}>
         Completed ({state.completedCount})
       </button>
+      <button onClick={actions.clearCompleted}>Clear Completed</button>
     </div>
   )
 }

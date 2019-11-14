@@ -39,3 +39,12 @@ export const showActive: Action = ({ state }) => {
 export const showCompleted: Action = ({ state }) => {
   state.filter = 'completed'
 }
+
+export const clearCompleted: Action = ({ state, effects }) => {
+  state.todoList
+    .filter(todo => todo.completed)
+    .forEach(todo => {
+      delete state.todos[todo.id]
+    })
+  effects.storeTodos(state.todos)
+}
