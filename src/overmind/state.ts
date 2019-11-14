@@ -26,12 +26,12 @@ export const state: State = {
   filteredList: ({ todos, filter }) =>
     Object.values(todos).filter(todo => {
       switch (filter) {
-        case 'all':
-          return true
         case 'active':
           return !todo.completed
         case 'completed':
           return todo.completed
+        default:
+          return true
       }
     }),
   totalCount: ({ todos }) => Object.values(todos).length,
