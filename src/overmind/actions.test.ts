@@ -1,5 +1,6 @@
 import { createOvermindMock } from 'overmind'
 import { config } from './'
+import { addTodo } from './actions'
 
 it('should add a list', () => {
   const { state, actions } = createOvermindMock(config, {
@@ -158,5 +159,22 @@ describe('filtered list', () => {
     expect(state.totalCount(listId)).toBe(3)
     actions.deleteTodo(todoId)
     expect(state.totalCount(listId)).toBe(2)
+  })
+
+  it('should delete a single list with all todos in the list', () => {
+    const { state, actions } = createOvermindMock(config, {
+      storeTodos: jest.fn(),
+      storeLists: jest.fn(),
+    })
+    const listId = actions.addList('list 1')
+    actions.addTodo({ listId, title: 'todo 1' })
+    actions.addTodo({ listId, title: 'todo 2' })
+    actions.addList('list 2')
+    actions.addList('list 3')
+    expect(state.todoLists.length).toBe(3)
+    expect(state.totalCount(listId)).toBe(2)
+    actions.deleteList(listId)
+    expect(state.todoLists.length).toBe(2)
+    expect(state.totalCount(listId)).toBe(0)
   })
 })

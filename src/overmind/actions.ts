@@ -81,6 +81,15 @@ export const clearCompleted: Action<string> = ({ state, effects }, listId) => {
   effects.storeTodos(state.todos)
 }
 
+export const deleteList: Action<string> = ({ state, effects }, listId) => {
+  delete state.lists[listId]
+  state.todoList(listId).forEach(todo => {
+    delete state.todos[todo.id]
+  })
+  effects.storeLists(state.lists)
+  effects.storeTodos(state.todos)
+}
+
 export const deleteTodo: Action<string> = ({ state, effects }, todoId) => {
   delete state.todos[todoId]
   effects.storeTodos(state.todos)
