@@ -20,7 +20,7 @@ const TodoItem = ({ todo }: Props) => {
 
   const handleStartEdit = () => {
     if (state.editingTodoId) return
-    actions.startEditing(todo.id)
+    actions.startEditingTodo(todo.id)
   }
 
   return (

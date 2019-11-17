@@ -29,11 +29,26 @@ export const toggleTodo: Action<string> = ({ state, effects }, todoId) => {
   effects.storeTodos(state.todos)
 }
 
-export const startEditing: Action<string> = ({ state }, todoId) => {
+export const startEditingList: Action<string> = ({ state }, listId) => {
+  state.editingListId = listId
+}
+
+export const stopEditingList: Action = ({ state }) => {
+  state.editingListId = undefined
+}
+
+export const saveEditingList: Action<string> = ({ state, effects }, name) => {
+  if (!state.editingListId) return
+  state.lists[state.editingListId].name = name
+  state.editingListId = undefined
+  effects.storeLists(state.lists)
+}
+
+export const startEditingTodo: Action<string> = ({ state }, todoId) => {
   state.editingTodoId = todoId
 }
 
-export const stopEditing: Action = ({ state }) => {
+export const stopEditingTodo: Action = ({ state }) => {
   state.editingTodoId = undefined
 }
 

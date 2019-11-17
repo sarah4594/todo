@@ -26,6 +26,7 @@ const App: React.FC = () => {
       <input
         type="text"
         placeholder="Add List"
+        disabled={Boolean(state.editingTodoId)}
         value={name}
         onChange={handleChange}
         onKeyUp={handleKeyUp}

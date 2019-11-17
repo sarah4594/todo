@@ -2,6 +2,7 @@ import React from 'react'
 import { useOvermind } from '../overmind'
 import { TodoList as TodoListType } from '../overmind/state'
 import TodoItem from './TodoItem'
+import TodoListEdit from './TodoListEdit'
 
 interface Props {
   list: TodoListType
@@ -27,17 +28,29 @@ const TodoList = ({ list }: Props) => {
     }
   }
 
+  const handleStartEdit = () => {
+    if (state.editingListId) return
+    actions.startEditingList(list.id)
+  }
+
   return (
     <div>
-      <h2>{list.name}</h2>
-      <input
-        type="text"
-        placeholder="Add Todo"
-        disabled={Boolean(state.editingTodoId)}
+      {state.editingListId === list.id ? (
+        <TodoListEdit list={list} />
+      ) : (
+        <>
+          <h2 onDoubleClick={handleStartEdit}>{list.name}</h2>
         value={title}
-        onChange={handleChange}
-        onKeyUp={handleKeyUp}
-      />
+          <input
+            type="text"
+            placeholder="Add Todo"
+            disabled={Boolean(state.editingTodoId)}
+            value={title}
+            onChange={handleChange}
+            onKeyUp={handleKeyUp}
+          />
+        </>
+      )}
       <ul>
         {state.filteredList(listId).map(todo => (
           <TodoItem key={todo.id} todo={todo} />

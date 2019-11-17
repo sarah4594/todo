@@ -26,6 +26,7 @@ export type State = {
   }
   todoLists: Derive<State, TodoList[]>
   todoList: Derive<State, (listId: string) => Todo[]>
+  editingListId?: string
   editingTodoId?: string
   filter: 'all' | 'active' | 'completed'
   filteredList: Derive<State, (listId: string) => Todo[]>
