@@ -1,8 +1,24 @@
 import { Action } from 'overmind'
 import Utils from '../Utils'
+import { NewTodo } from './state'
 
-export const addTodo: Action<string, string> = ({ state, effects }, title) => {
-  const todo = { id: Utils.uuid(), title, completed: false }
+export const addList: Action<string, string> = ({ state, effects }, name) => {
+  const list = { id: Utils.uuid(), name }
+  state.lists[list.id] = list
+  effects.storeLists(state.lists)
+  return list.id
+}
+
+export const addTodo: Action<NewTodo, string> = (
+  { state, effects },
+  newTodo,
+) => {
+  const todo = {
+    id: Utils.uuid(),
+    listId: newTodo.listId,
+    title: newTodo.title,
+    completed: false,
+  }
   state.todos[todo.id] = todo
   effects.storeTodos(state.todos)
   return todo.id
@@ -40,8 +56,9 @@ export const showCompleted: Action = ({ state }) => {
   state.filter = 'completed'
 }
 
-export const clearCompleted: Action = ({ state, effects }) => {
-  state.todoList
+export const clearCompleted: Action<string> = ({ state, effects }, listId) => {
+  state
+    .todoList(listId)
     .filter(todo => todo.completed)
     .forEach(todo => {
       delete state.todos[todo.id]

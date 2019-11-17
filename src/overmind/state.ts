@@ -2,29 +2,47 @@ import { Derive } from 'overmind'
 
 export interface Todo {
   id: string
+  listId: string
   title: string
   completed: boolean
+}
+
+export interface NewTodo {
+  listId: string
+  title: string
+}
+
+export interface TodoList {
+  id: string
+  name: string
 }
 
 export type State = {
   todos: {
     [id: string]: Todo
   }
-  todoList: Derive<State, Todo[]>
+  lists: {
+    [id: string]: TodoList
+  }
+  todoLists: Derive<State, TodoList[]>
+  todoList: Derive<State, (listId: string) => Todo[]>
   editingTodoId?: string
   filter: 'all' | 'active' | 'completed'
-  filteredList: Derive<State, Todo[]>
-  totalCount: Derive<State, number>
-  activeCount: Derive<State, number>
-  completedCount: Derive<State, number>
+  filteredList: Derive<State, (listId: string) => Todo[]>
+  totalCount: Derive<State, (listId: string) => number>
+  activeCount: Derive<State, (listId: string) => number>
+  completedCount: Derive<State, (listId: string) => number>
 }
 
 export const state: State = {
   todos: {},
-  todoList: ({ todos }) => Object.values(todos),
+  lists: {},
+  todoLists: ({ lists }) => Object.values(lists),
+  todoList: ({ todos }) => listId =>
+    Object.values(todos).filter(todo => todo.listId === listId),
   filter: 'all',
-  filteredList: ({ todos, filter }) =>
-    Object.values(todos).filter(todo => {
+  filteredList: ({ todoList, filter }) => listId =>
+    todoList(listId).filter(todo => {
       switch (filter) {
         case 'active':
           return !todo.completed
@@ -34,9 +52,9 @@ export const state: State = {
           return true
       }
     }),
-  totalCount: ({ todos }) => Object.values(todos).length,
-  activeCount: ({ todos }) =>
-    Object.values(todos).filter(todo => !todo.completed).length,
-  completedCount: ({ todos }) =>
-    Object.values(todos).filter(todo => todo.completed).length,
+  totalCount: ({ todoList }) => listId => todoList(listId).length,
+  activeCount: ({ todoList }) => listId =>
+    todoList(listId).filter(todo => !todo.completed).length,
+  completedCount: ({ todoList }) => listId =>
+    todoList(listId).filter(todo => todo.completed).length,
 }

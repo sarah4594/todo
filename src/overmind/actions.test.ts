@@ -1,116 +1,162 @@
 import { createOvermindMock } from 'overmind'
 import { config } from './'
 
-it('should add a todo', () => {
+it('should add a list', () => {
+  const { state, actions } = createOvermindMock(config, {
+    storeLists: jest.fn(),
+  })
+  const name = 'new todo list'
+  actions.addList(name)
+  console.log(state.lists)
+  expect(state.todoLists.find(list => list.name === name)).toBeTruthy()
+})
+
+it('should add a todo to a list', () => {
   const { state, actions } = createOvermindMock(config, {
     storeTodos: jest.fn(),
+    storeLists: jest.fn(),
   })
+  const name = 'new todo list'
+  const listId = actions.addList(name)
   const title = 'new todo'
-  actions.addTodo(title)
+  actions.addTodo({ listId, title })
   console.log(state.todos)
-  expect(state.todoList.find(todo => todo.title === title)).toBeTruthy()
+  expect(state.todoList(listId).find(todo => todo.title === title)).toBeTruthy()
 })
 
 it('should add 2 todos', () => {
   const { state, actions } = createOvermindMock(config, {
     storeTodos: jest.fn(),
+    storeLists: jest.fn(),
   })
+  const name = 'new todo list'
+  const listId = actions.addList(name)
   const title1 = 'new todo 1'
   const title2 = 'new todo 2'
-  actions.addTodo(title1)
-  actions.addTodo(title2)
+  actions.addTodo({ listId, title: title1 })
+  actions.addTodo({ listId, title: title2 })
   console.log(state.todos)
-  expect(state.todoList.length).toBe(2)
+  expect(state.todoList(listId).length).toBe(2)
 })
 
 it('should toggle completed', () => {
   const { state, actions } = createOvermindMock(config, {
     storeTodos: jest.fn(),
+    storeLists: jest.fn(),
   })
+  const name = 'new todo list'
+  const listId = actions.addList(name)
   const title = 'new todo'
-  const todoId = actions.addTodo(title)
+  const todoId = actions.addTodo({ listId, title })
   expect(state.todos[todoId].completed).toBe(false)
   actions.toggleTodo(todoId)
   expect(state.todos[todoId].completed).toBe(true)
+  actions.toggleTodo(todoId)
+  expect(state.todos[todoId].completed).toBe(false)
 })
 
 describe('filtered list', () => {
   it('should return all todos', () => {
     const { state, actions } = createOvermindMock(config, {
       storeTodos: jest.fn(),
+      storeLists: jest.fn(),
     })
-    const todoId = actions.addTodo('todo1')
+    const name = 'new todo list'
+    const listId = actions.addList(name)
+    const title = 'new todo'
+    const todoId = actions.addTodo({ listId, title })
     actions.toggleTodo(todoId)
-    actions.addTodo('todo2')
-    actions.addTodo('todo3')
+    actions.addTodo({ listId, title: 'todo 2' })
+    actions.addTodo({ listId, title: 'todo 3' })
     actions.showAll()
-    expect(state.filteredList.length).toBe(3)
+    expect(state.filteredList(listId).length).toBe(3)
   })
 
   it('should return active todos', () => {
     const { state, actions } = createOvermindMock(config, {
       storeTodos: jest.fn(),
+      storeLists: jest.fn(),
     })
-    const todoId = actions.addTodo('todo1')
+    const name = 'new todo list'
+    const listId = actions.addList(name)
+    const title = 'new todo'
+    const todoId = actions.addTodo({ listId, title })
     actions.toggleTodo(todoId)
-    actions.addTodo('todo2')
-    actions.addTodo('todo3')
+    actions.addTodo({ listId, title: 'todo 2' })
+    actions.addTodo({ listId, title: 'todo 3' })
     actions.showActive()
-    expect(state.filteredList.length).toBe(2)
+    expect(state.filteredList(listId).length).toBe(2)
   })
 
   it('should return completed todos', () => {
     const { state, actions } = createOvermindMock(config, {
       storeTodos: jest.fn(),
+      storeLists: jest.fn(),
     })
-    const todoId = actions.addTodo('todo1')
+    const name = 'new todo list'
+    const listId = actions.addList(name)
+    const title = 'new todo'
+    const todoId = actions.addTodo({ listId, title })
     actions.toggleTodo(todoId)
-    actions.addTodo('todo2')
-    actions.addTodo('todo3')
+    actions.addTodo({ listId, title: 'todo 2' })
+    actions.addTodo({ listId, title: 'todo 3' })
     actions.showCompleted()
-    expect(state.filteredList.length).toBe(1)
+    expect(state.filteredList(listId).length).toBe(1)
   })
 
   it('should return correct counts by status', () => {
     const { state, actions } = createOvermindMock(config, {
       storeTodos: jest.fn(),
+      storeLists: jest.fn(),
     })
-    const todoId = actions.addTodo('todo1')
+    const name = 'new todo list'
+    const listId = actions.addList(name)
+    const title = 'new todo'
+    const todoId = actions.addTodo({ listId, title })
     actions.toggleTodo(todoId)
-    actions.addTodo('todo2')
-    actions.addTodo('todo3')
-    expect(state.totalCount).toBe(3)
-    expect(state.activeCount).toBe(2)
-    expect(state.completedCount).toBe(1)
-    actions.addTodo('todo4')
-    expect(state.totalCount).toBe(4)
-    expect(state.activeCount).toBe(3)
-    expect(state.completedCount).toBe(1)
+    actions.addTodo({ listId, title: 'todo 2' })
+    actions.addTodo({ listId, title: 'todo 3' })
+    expect(state.totalCount(listId)).toBe(3)
+    expect(state.activeCount(listId)).toBe(2)
+    expect(state.completedCount(listId)).toBe(1)
+    actions.addTodo({ listId, title: 'todo 4' })
+    expect(state.totalCount(listId)).toBe(4)
+    expect(state.activeCount(listId)).toBe(3)
+    expect(state.completedCount(listId)).toBe(1)
   })
 
   it('should delete completed todos and return a list of active todos', () => {
     const { state, actions } = createOvermindMock(config, {
       storeTodos: jest.fn(),
+      storeLists: jest.fn(),
     })
-    const todoId = actions.addTodo('todo1')
+    const name = 'new todo list'
+    const listId = actions.addList(name)
+    const title = 'new todo'
+    const todoId = actions.addTodo({ listId, title })
     actions.toggleTodo(todoId)
-    actions.addTodo('todo2')
-    actions.addTodo('todo3')
-    expect(state.completedCount).toBe(1)
-    actions.clearCompleted()
-    expect(state.completedCount).toBe(0)
-    expect(state.activeCount).toBe(2)
+    actions.addTodo({ listId, title: 'todo 2' })
+    actions.addTodo({ listId, title: 'todo 3' })
+    expect(state.completedCount(listId)).toBe(1)
+    actions.clearCompleted(listId)
+    expect(state.completedCount(listId)).toBe(0)
+    expect(state.activeCount(listId)).toBe(2)
   })
 
   it('should delete a single todo', () => {
     const { state, actions } = createOvermindMock(config, {
       storeTodos: jest.fn(),
+      storeLists: jest.fn(),
     })
-    const todoId = actions.addTodo('todo1')
-    actions.addTodo('todo2')
-    actions.addTodo('todo3')
-    expect(state.totalCount).toBe(3)
+    const name = 'new todo list'
+    const listId = actions.addList(name)
+    const title = 'new todo'
+    const todoId = actions.addTodo({ listId, title })
+    actions.toggleTodo(todoId)
+    actions.addTodo({ listId, title: 'todo 2' })
+    actions.addTodo({ listId, title: 'todo 3' })
+    expect(state.totalCount(listId)).toBe(3)
     actions.deleteTodo(todoId)
-    expect(state.totalCount).toBe(2)
+    expect(state.totalCount(listId)).toBe(2)
   })
 })
