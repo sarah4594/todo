@@ -33,6 +33,10 @@ const TodoList = ({ list }: Props) => {
     actions.startEditingList(list.id)
   }
 
+  const handleDelete = () => {
+    actions.deleteList(list.id)
+  }
+
   return (
     <div>
       {state.editingListId === list.id ? (
@@ -40,7 +44,7 @@ const TodoList = ({ list }: Props) => {
       ) : (
         <>
           <h2 onDoubleClick={handleStartEdit}>{list.name}</h2>
-        value={title}
+          <button onClick={handleDelete}>Delete List</button>
           <input
             type="text"
             placeholder="Add Todo"
