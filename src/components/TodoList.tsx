@@ -1,5 +1,4 @@
 import React from 'react'
-import { useFirebaseAuth } from '@use-firebase/auth'
 import { useOvermind } from '../overmind'
 import { TodoList as TodoListType } from '../overmind/state'
 import TodoItem from './TodoItem'

@@ -7,7 +7,7 @@ const AuthenticatedApp: React.FC = () => {
   const { state, actions } = useOvermind()
   const [name, setName] = React.useState('')
   const { user, signOut } = useFirebaseAuth()
-  const { displayName, id } = user
+  const { displayName } = user
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value)

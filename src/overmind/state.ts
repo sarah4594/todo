@@ -1,5 +1,4 @@
 import { Derive } from 'overmind'
-import { setCurrentUser } from './actions'
 
 export interface Todo {
   id: string

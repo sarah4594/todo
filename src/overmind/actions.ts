@@ -1,6 +1,6 @@
 import { Action } from 'overmind'
 import Utils from '../Utils'
-import { NewTodo, TodoList } from './state'
+import { NewTodo } from './state'
 
 export const setCurrentUser: Action<string> = ({ state }, userId) => {
   state.currentUserId = userId
