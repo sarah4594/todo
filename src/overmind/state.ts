@@ -1,10 +1,12 @@
 import { Derive } from 'overmind'
+import { setCurrentUser } from './actions'
 
 export interface Todo {
   id: string
   listId: string
   title: string
   completed: boolean
+  userId: string
 }
 
 export interface NewTodo {
@@ -15,9 +17,11 @@ export interface NewTodo {
 export interface TodoList {
   id: string
   name: string
+  userId: string
 }
 
 export type State = {
+  currentUserId: string
   todos: {
     [id: string]: Todo
   }
@@ -33,9 +37,11 @@ export type State = {
   totalCount: Derive<State, (listId: string) => number>
   activeCount: Derive<State, (listId: string) => number>
   completedCount: Derive<State, (listId: string) => number>
+  listByUser: Derive<State, TodoList[]>
 }
 
 export const state: State = {
+  currentUserId: '',
   todos: {},
   lists: {},
   todoLists: ({ lists }) => Object.values(lists),
@@ -58,4 +64,6 @@ export const state: State = {
     todoList(listId).filter(todo => !todo.completed).length,
   completedCount: ({ todoList }) => listId =>
     todoList(listId).filter(todo => todo.completed).length,
+  listByUser: ({ todoLists, currentUserId }) =>
+    todoLists.filter(list => list.userId === currentUserId),
 }

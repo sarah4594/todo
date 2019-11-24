@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@use-firebase/app": "^0.3.2",
+    "@use-firebase/auth": "^0.3.3",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "react-scripts": "3.2.0"
+    "react-scripts": "3.2.0",
+    "splashr": "^0.3.0"
   },
   "devDependencies": {
     "@testing-library/react": "^9.3.1",

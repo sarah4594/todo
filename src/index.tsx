@@ -2,13 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { overmind } from './overmind'
 import { Provider } from 'overmind-react'
+import FirebaseApp from './FirebaseApp'
 import './index.css'
-import App from './components/App'
 import * as serviceWorker from './serviceWorker'
 
 ReactDOM.render(
   <Provider value={overmind}>
-    <App />
+    <FirebaseApp />
   </Provider>,
   document.getElementById('root'),
 )
