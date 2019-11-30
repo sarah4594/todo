@@ -1,6 +1,10 @@
 import React from 'react'
 import { useOvermind } from '../overmind'
-import { TodoList as TodoListType } from '../overmind/state'
+import {
+  TodoList as TodoListType,
+  todofilter,
+  getstats,
+} from '../overmind/state'
 import TodoItem from './TodoItem'
 import TodoListEdit from './TodoListEdit'
 
@@ -10,8 +14,8 @@ interface Props {
 
 const TodoList = ({ list }: Props) => {
   const { state, actions } = useOvermind()
+  const { totalCount, activeCount, completedCount } = getstats(list)
   const [title, setTitle] = React.useState('')
-  const listId = list.id
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value)
@@ -23,7 +27,7 @@ const TodoList = ({ list }: Props) => {
     }
     event.preventDefault()
     if (title) {
-      actions.addTodo({ listId, title })
+      actions.addTodo({ list, title })
       setTitle('')
     }
   }
@@ -34,7 +38,7 @@ const TodoList = ({ list }: Props) => {
   }
 
   const handleDelete = () => {
-    actions.deleteList(list.id)
+    actions.deleteList(list)
   }
 
   return (
@@ -55,15 +59,19 @@ const TodoList = ({ list }: Props) => {
           />
         </>
       )}
+      <button onClick={() => actions.showAll(list)}>All {totalCount}</button>
+      <button onClick={() => actions.showActive(list)}>
+        Active {activeCount}
+      </button>
+      <button onClick={() => actions.showCompleted(list)}>
+        Completed {completedCount}
+      </button>
       <ul>
-        {state.filteredList(listId).map(todo => (
+        {todofilter(list).map(todo => (
           <TodoItem key={todo.id} todo={todo} />
         ))}
       </ul>
-      <span>All ({state.totalCount(listId)})</span>
-      <span>Active ({state.activeCount(listId)})</span>
-      <span>Completed ({state.completedCount(listId)})</span>
-      <button onClick={() => actions.clearCompleted(listId)}>
+      <button onClick={() => actions.clearCompleted(list)}>
         Clear Completed
       </button>
     </div>

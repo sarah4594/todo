@@ -1,5 +1,3 @@
-import { Derive } from 'overmind'
-
 export interface Todo {
   id: string
   listId: string
@@ -17,52 +15,52 @@ export interface TodoList {
   id: string
   name: string
   userId: string
+  filter: 'all' | 'active' | 'completed'
+  todos: {
+    [id: string]: Todo
+  }
+}
+
+export function tolist<T>(o: { [id: string]: T }): Readonly<T[]> {
+  return Object.values(o)
+}
+
+export function getstats(list: TodoList) {
+  const todos = tolist(list.todos)
+  return {
+    totalCount: todos.length,
+    activeCount: todos.filter(todo => !todo.completed).length,
+    completedCount: todos.filter(todo => todo.completed).length,
+  }
+}
+
+export function todofilter(list: TodoList): Readonly<Todo[]> {
+  return tolist(list.todos).filter(todo => {
+    switch (list.filter) {
+      case 'active':
+        return !todo.completed
+      case 'completed':
+        return todo.completed
+      default:
+        return true
+    }
+  })
+}
+
+export function listsbyuser(state: State) {
+  return tolist(state.lists).filter(list => list.userId === state.currentUserId)
 }
 
 export type State = {
   currentUserId: string
-  todos: {
-    [id: string]: Todo
-  }
   lists: {
     [id: string]: TodoList
   }
-  todoLists: Derive<State, TodoList[]>
-  todoList: Derive<State, (listId: string) => Todo[]>
   editingListId?: string
   editingTodoId?: string
-  filter: 'all' | 'active' | 'completed'
-  filteredList: Derive<State, (listId: string) => Todo[]>
-  totalCount: Derive<State, (listId: string) => number>
-  activeCount: Derive<State, (listId: string) => number>
-  completedCount: Derive<State, (listId: string) => number>
-  listByUser: Derive<State, TodoList[]>
 }
 
 export const state: State = {
   currentUserId: '',
-  todos: {},
   lists: {},
-  todoLists: ({ lists }) => Object.values(lists),
-  todoList: ({ todos }) => listId =>
-    Object.values(todos).filter(todo => todo.listId === listId),
-  filter: 'all',
-  filteredList: ({ todoList, filter }) => listId =>
-    todoList(listId).filter(todo => {
-      switch (filter) {
-        case 'active':
-          return !todo.completed
-        case 'completed':
-          return todo.completed
-        default:
-          return true
-      }
-    }),
-  totalCount: ({ todoList }) => listId => todoList(listId).length,
-  activeCount: ({ todoList }) => listId =>
-    todoList(listId).filter(todo => !todo.completed).length,
-  completedCount: ({ todoList }) => listId =>
-    todoList(listId).filter(todo => todo.completed).length,
-  listByUser: ({ todoLists, currentUserId }) =>
-    todoLists.filter(list => list.userId === currentUserId),
 }

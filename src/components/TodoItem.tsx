@@ -11,16 +11,16 @@ const TodoItem = ({ todo }: Props) => {
   const { actions, state } = useOvermind()
 
   const handleClick = () => {
-    actions.toggleTodo(todo.id)
+    actions.toggleTodo(todo)
   }
 
   const handleDelete = () => {
-    actions.deleteTodo(todo.id)
+    actions.deleteTodo(todo)
   }
 
   const handleStartEdit = () => {
     if (state.editingTodoId) return
-    actions.startEditingTodo(todo.id)
+    actions.startEditingTodo(todo)
   }
 
   return (

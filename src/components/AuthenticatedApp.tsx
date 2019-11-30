@@ -2,6 +2,7 @@ import React from 'react'
 import { useOvermind } from '../overmind'
 import { useFirebaseAuth } from '@use-firebase/auth'
 import TodoList from './TodoList'
+import { listsbyuser } from '../overmind/state'
 
 const AuthenticatedApp: React.FC = () => {
   const { state, actions } = useOvermind()
@@ -35,11 +36,8 @@ const AuthenticatedApp: React.FC = () => {
         onChange={handleChange}
         onKeyUp={handleKeyUp}
       />
-      <button onClick={actions.showAll}>All</button>
-      <button onClick={actions.showActive}>Active</button>
-      <button onClick={actions.showCompleted}>Completed</button>
       <div>
-        {state.listByUser.map(list => (
+        {listsbyuser(state).map(list => (
           <TodoList key={list.id} list={list} />
         ))}
       </div>
